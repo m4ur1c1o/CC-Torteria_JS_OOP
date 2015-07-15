@@ -6,11 +6,24 @@ $( document ).ready(function() {
 
 
     var new_torta = new Torta(type);
-    // console.log(new_torta);
     var result = new_torta.bake_time();
-    // console.log(result);
-    var batch = new TortaBatch(8, type);
-    console.log(batch);
+    var batch = new TortaBatch(5, type);
+    var oven = new Oven();
+    oven.getin_batch(batch, time);
+
+    var countdown = function(){
+      $("#countdown").text(time);
+      $("#status").text(batch.status());
+      oven.update();
+      time -= 1;
+      if (time >= 0) {
+        setTimeout( function(){ countdown() }, 1000 );
+      } else {
+        return "";
+      }
+    };
+
+    setTimeout( countdown, 1000 );
   });
 });
 
@@ -36,33 +49,62 @@ var TortaBatch = function(batch_size, type){
   function initialize(){
     self.batch_size = batch_size;
     self.type = type;
+    self.cook_time = 0;
     var tortas = [];
     // console.log(tortas);
     for (var i = 0; i < batch_size; i++) {
       tortas.push(new Torta(type));
     };
     // console.log(tortas);
-    var ready_time = tortas[0].bake_time();
-    var cook_time = 0;
+    self.ready_time = tortas[0].bake_time();
   };
   initialize();
 };
 
 // status method for TortaBatch
 TortaBatch.prototype.status = function(){
-
+  var self = this;
+  if (self.cook_time > self.ready_time) {
+    return "QUEMADO";
+  } else if (self.cook_time == self.ready_time) {
+    return "LISTO";
+  } else if (self.cook_time == 0) {
+    return "Crudo";
+  } else if (self.cook_time > 0 && self.cook_time < self.ready_time) {
+    return "Casi listo";
+  }
 };
-
-
-
-
-
-
-
+///////////////////////////////////////////////////////////////////////////////
 
 // Class Oven
-// var Oven = function(time){
-// 	var time_baked = 0;
-// 	this.time = time;
-// };
+var Oven = function(){
+  var self = this;
+  function initialize(){
+    self.batch_inside = false;
+    self.oven_cook_time = 0;
+  };
+  initialize();
+};
+
+Oven.prototype.getin_batch = function(batch, cook_time){
+  var self = this;
+  if (self.batch_inside == false) {
+    self.batch_inside = true;
+    self.batch = batch;
+    self.oven_cook_time = cook_time;
+    return "Getting batch in";
+  } else {
+    return "There's no space inside the oven";
+  }
+};
+
+Oven.prototype.update = function(){
+  var self = this;
+  if (self.oven_cook_time > 0) {
+    self.oven_cook_time -= 1;
+    self.batch.cook_time += 1;
+  } else {
+    return "Add more time to the oven";
+  }
+};
 ///////////////////////////////////////////////////////////////////////////////
