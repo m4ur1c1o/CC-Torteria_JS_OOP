@@ -1,45 +1,67 @@
 $( document ).ready(function() {
-  $( 'form' ).on("submit", function( event ){
+
+  $(".create-oven").on("submit", function( event ){
     event.preventDefault();
-    var type = $("input[name='type']").val();
-    var time = $("input[name='time']").val();
+    
+    $(".create-oven").remove();
+    $(".oven").css("visibility", "visible");
+    
+    $form = $('<form id="cook" action="" method="post"></form>');
 
+    $form.append('<input class="type" type="text" name="type" placeholder="Tipo">');
+    $form.append('<input class="time" type="text" name="time" placeholder="Tiempo">');
+    $form.append('<input class="submit" type="submit" value="Cocinar">');
 
-    var new_torta = new Torta(type);
-    var result = new_torta.bake_time();
-    var batch = new TortaBatch(5, type);
-    var oven = new Oven();
-    oven.getin_batch(batch, time);
+    $("#timer").before($form);
+    $("#cook").before('<h1 id="horno-title">Horno</h1>');
 
-    var countdown = function(){
-      $("#countdown").text(time);
-      $("#status").text(batch.status());
-      oven.update();
-      time -= 1;
-      if (time >= 0) {
-        setTimeout( function(){ countdown() }, 1000 );
-      } else {
-        return "";
-      }
-    };
+    $( '#cook' ).on("submit", function( event ){
+      event.preventDefault();
+      $('#timer').css('background-color', 'transparent');
+      var type = $("input[name='type']").val();
+      var time = $("input[name='time']").val();
 
-    setTimeout( countdown, 1000 );
+      var new_torta = new Torta(type);
+      var result = new_torta.bake_time();
+      var batch = new TortaBatch(5, type);
+      var oven = new Oven();
+      oven.getin_batch(batch, time);
+
+      var countdown = function(){
+        $('#timer').append('<h3 id="countdown"></h3>');
+        $('#timer').append('<h3 id="status"></h3>');
+        $("#countdown").text(time);
+        $("#status").text(batch.status());
+        oven.update();
+        time -= 1;
+        if (time >= 0) {
+          setTimeout( function(){ countdown() }, 1000 );
+        } else {
+          $('#timer').css('background-color', 'green');
+          return "";
+        }
+      };
+
+      setTimeout( countdown, 1000 );
+    });
   });
 });
 
+
+///////////////////////////////////////////////////////////////////////////////
 // Class Torta
 var Torta = function(type){
-	var self = this;
-	function initialize(){
-		self.type = type;
-	};
-	initialize();
+  var self = this;
+  function initialize(){
+    self.type = type;
+  };
+  initialize();
 };
 
 // bake_time method for Torta
 Torta.prototype.bake_time = function(){
-	var bake_time = {"jamon": 3, "queso": 8, "milanesa": 10};
-	return bake_time[this.type];
+  var bake_time = {"jamon": 3, "queso": 8, "milanesa": 10};
+  return bake_time[this.type];
 };
 ///////////////////////////////////////////////////////////////////////////////
 

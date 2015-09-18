@@ -1,6 +1,52 @@
-#container{
-	border:solid black 1px;
-	padding: 30px;
-	width: 600px;
+.container {
+	height: 700px;
+	padding: 30px 70px;
 	margin: 0 auto;
 }
+
+#horno-title {
+	color: black;
+	position: relative;
+	top: 31px;
+    left: 85px;
+}
+
+.oven {
+	width: 768px;
+	visibility: hidden;
+	height: 500px;
+	border: 5px solid black;
+	border-radius: 5px;
+	background: url("horno.png") no-repeat;
+	background-size: 768px 800px;
+}
+
+#cook {
+	position: relative;
+	top: 113px;
+	left: 173px;
+}
+
+#timer {
+	width: 145px;
+	height: 90px;
+	position: relative;
+	top: -54px;
+	left: 309px;
+	border: 2px solid #999;
+}
+
+#countdown {
+	color: white;
+	padding-left: 30px;
+}
+
+#status {
+	color: white;
+	padding-left: 30px;
+}
+
+.clear {
+	clear: both;
+}
+
