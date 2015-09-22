@@ -19,6 +19,7 @@
 	border-radius: 5px;
 	background: url("horno.png") no-repeat;
 	background-size: 768px 800px;
+	margin: 0 auto;
 }
 
 #cook {

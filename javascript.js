@@ -2,10 +2,10 @@ $( document ).ready(function() {
 
   $(".create-oven").on("submit", function( event ){
     event.preventDefault();
-    
+
     $(".create-oven").remove();
     $(".oven").css("visibility", "visible");
-    
+
     $form = $('<form id="cook" action="" method="post"></form>');
 
     $form.append('<input class="type" type="text" name="type" placeholder="Tipo">');
@@ -33,11 +33,14 @@ $( document ).ready(function() {
         $("#countdown").text(time);
         $("#status").text(batch.status());
         oven.update();
+        // if ($("#status").text(batch.status()) == "QUEMADO") {
+        //   $('#timer').css('background-color', '#000');
+        // };
         time -= 1;
         if (time >= 0) {
           setTimeout( function(){ countdown() }, 1000 );
         } else {
-          $('#timer').css('background-color', 'green');
+          $('#timer').css('background-color', '#00B600');
           return "";
         }
       };
